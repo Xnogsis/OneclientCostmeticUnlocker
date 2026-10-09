@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "oneclient_local_cosmetics",
+  "version": "1.0.1",
+  "name": "OneClient Local Cosmetics",
+  "description": "Local wardrobe catalog and equipment overrides for PolyPlus 1.2.57.",
+  "environment": "client",
+  "mixins": ["localcosmetics.mixins.json"],
+  "depends": {"fabricloader": ">=0.19.5", "polyplus": "1.2.57"}
+}

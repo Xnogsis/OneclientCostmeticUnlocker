@@ -1,0 +1,25 @@
+# Local game artifacts, decompilation output, and logs
+/analysis/
+/build/
+/dist/
+*.jar
+*.class
+*.log
+*.zip
+hs_err_pid*
+replay_pid*
+
+# Editors and operating systems
+/.idea/
+/.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+auth.json
+accounts.json
+user_data.db
