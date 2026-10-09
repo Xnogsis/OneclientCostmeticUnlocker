@@ -2,6 +2,10 @@
 /analysis/
 /build/
 /dist/
+/verification/
+/verify.ps1
+/tests/
+/test/
 *.jar
 *.class
 *.log

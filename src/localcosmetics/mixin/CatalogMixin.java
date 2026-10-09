@@ -26,7 +26,7 @@ public abstract class CatalogMixin {
         if (LocalCosmetics.overridesPlayer(uuid)) cir.setReturnValue((Integer)((java.util.Map<?,?>)LocalCosmetics.localMap(this)).get(slot));
     }
 
-    @Inject(method = "name=/^setEquipped-gIAlu-s$/", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = "name=/^setEquipped(?:-[A-Za-z0-9_-]+)?$/", at = @At("HEAD"), cancellable = true, remap = false)
     private void equip(@Coerce Object request, @Coerce Object continuation, CallbackInfoReturnable<Object> cir) {
         cir.setReturnValue(LocalCosmetics.equip(this, request));
     }

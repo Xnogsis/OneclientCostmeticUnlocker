@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+- Ship one Minecraft-independent JAR without an exact PolyPlus version requirement.
+- Match Kotlin-mangled method names across compiler suffix changes.
+- Check the cosmetic API before applying hooks; disable the entire add-on for incompatible builds.
+- Discover installed PolyPlus profiles automatically for installation and verification.
+- Remove older add-on versions during upgrades and simplify the README.
+
 ## 1.0.1
 
 - Fix the main-menu failure caused by literal selectors for Kotlin method names containing hyphens.

@@ -1,12 +1,12 @@
 param([string]$ClientRoot = (Join-Path $env:APPDATA 'Polyfrost\OneClient'))
 $ErrorActionPreference = 'Stop'
 $clusterRoot = Join-Path $ClientRoot 'clusters'
-foreach ($profileName in @('1.8.9 Fabric', '26.3 Fabric')) {
-    foreach ($version in @('1.0.0', '1.0.1')) {
-        $modFile = Join-Path (Join-Path (Join-Path $clusterRoot $profileName) 'mods') "oneclient-local-cosmetics-$version.jar"
-        if (Test-Path -LiteralPath $modFile) {
-            Remove-Item -LiteralPath $modFile
-            Write-Output "Removed: $modFile"
-        }
+if (-not (Test-Path -LiteralPath $clusterRoot)) { return }
+foreach ($profile in (Get-ChildItem -LiteralPath $clusterRoot -Directory)) {
+    $modsPath = Join-Path $profile.FullName 'mods'
+    if (-not (Test-Path -LiteralPath $modsPath)) { continue }
+    foreach ($modFile in @(Get-ChildItem -LiteralPath $modsPath -Filter 'oneclient-local-cosmetics-*.jar')) {
+        Remove-Item -LiteralPath $modFile.FullName
+        Write-Output "Removed: $($modFile.FullName)"
     }
 }

@@ -3,7 +3,7 @@ package localcosmetics;
 import java.lang.reflect.*;
 import java.util.*;
 
-/** PolyPlus 1.2.57 adapter. All overrides live in this JVM only. */
+/** Minecraft-independent PolyPlus adapter. All overrides live in this JVM only. */
 public final class LocalCosmetics {
     private static final String ROOT = "org.polyfrost.polyplus.client.";
     private static final Map<Object,Integer> overrides = new HashMap<>();

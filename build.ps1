@@ -6,7 +6,7 @@ $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot\tooling.ps1"
 $tools = Get-LocalBuildTools -ClientRoot $ClientRoot -JavaHome $JavaHome
 $jdkRoot = $tools.JavaBin
-$mixinJar = $tools.MixinJar
+$mixinJar = $tools.CompileClasspath
 New-Item -ItemType Directory -Force -Path "$PSScriptRoot\build\classes", "$PSScriptRoot\dist" | Out-Null
 $sources = @(Get-ChildItem -LiteralPath "$PSScriptRoot\src" -Filter '*.java' -Recurse | ForEach-Object FullName)
 & "$jdkRoot\javac.exe" --release 17 -proc:none -classpath $mixinJar -d "$PSScriptRoot\build\classes" @sources
