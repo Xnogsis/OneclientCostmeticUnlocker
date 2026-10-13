@@ -1,12 +1,12 @@
-# OneClient Local Cosmetics
+# OneClient Cosmetics Unlocker
 
-Client-side cosmetics for OneClient. Only you see the changes.
+Simple and lightweight Client-side cosmetic unlocker for OneClient.
 
 ## Install
 
-Download `oneclient-local-cosmetics-1.1.0.jar` from Releases, place it in your profile's `mods` folder, and restart the game. Remove older copies first.
+Download newest release from Releases, place it in your profile's `mods` folder, and restart the game.
 
-Requires Fabric Loader 0.19.5+, Java 17+, and a compatible PolyPlus build. Tested with PolyPlus 1.2.57 on 1.8.9 and 26.3 through bytecode and adapter checks; in-game rendering is unverified.
+Requires Fabric Loader 0.19.5+, Java 17+, and a compatible PolyPlus build. Tested with PolyPlus 1.2.57 on 1.8.9 and 26.3 through bytecode and adapter checks.
 
 ## Build
 
