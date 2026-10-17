@@ -14,7 +14,8 @@ function Get-LocalBuildTools {
     $mixinJar = Get-ChildItem -LiteralPath (Join-Path $metadata 'libraries\net\fabricmc\sponge-mixin') -Filter '*.jar' -Recurse -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if (-not $mixinJar) { throw 'Mixin library not found. Launch an installed OneClient profile to download its dependencies first.' }
-    $asmJars = @(Get-ChildItem -LiteralPath (Join-Path $metadata 'libraries\org\ow2\asm') -Filter '*.jar' -Recurse | ForEach-Object FullName)
+    $asmJars = @(Get-ChildItem -LiteralPath (Join-Path $metadata 'libraries\org\ow2\asm') -Filter '*.jar' -Recurse |
+        Where-Object { $_.FullName -notmatch '[\\/]asm-all[\\/]' } | ForEach-Object FullName)
     $manifest = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'resources\fabric.mod.json') -Raw | ConvertFrom-Json
     return [pscustomobject]@{
         Metadata = $metadata

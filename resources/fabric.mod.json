@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "oneclient_local_cosmetics",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "OneClient Local Cosmetics",
   "description": "Local wardrobe and equipment overrides across compatible OneClient versions.",
   "environment": "client",

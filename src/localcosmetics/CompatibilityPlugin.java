@@ -26,6 +26,9 @@ public final class CompatibilityPlugin implements IMixinConfigPlugin {
             && (f.access & Opcodes.ACC_STATIC)!=0)) throw new IllegalStateException(node.name + ": incompatible field " + name);
     }
     public static void validate(Bytecode bytes) throws Exception {
+        ClassNode slot = bytes.read(RESP + "BodySlot");
+        if (!"java/lang/Enum".equals(slot.superName))
+            throw new IllegalStateException("BodySlot must be an enum for saved selections");
         ClassNode catalog = bytes.read(CAT);
         for (String name : List.of("ownedIds", "ownedCosmeticIds", "ownedEmoteIds")) method(catalog,name,"()Ljava/util/Set;");
         method(catalog,"ownedCosmeticGroupIds","()Ljava/util/List;");

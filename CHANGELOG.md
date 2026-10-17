@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0
+
+- Save equipment overrides per profile, including explicitly unequipped slots.
+- Restore saved selections after game restarts and PolyPlus resets.
+- Write saves atomically where supported and preserve unreadable or malformed files.
+- Ignore unknown saved slot names and handle missing player UUIDs safely.
+- Check that PolyPlus body slots remain enums before applying hooks.
+- Exclude the legacy ASM bundle from the build classpath to prevent conflicts with modern ASM.
+
 ## 1.1.0
 
 - Ship one Minecraft-independent JAR without an exact PolyPlus version requirement.

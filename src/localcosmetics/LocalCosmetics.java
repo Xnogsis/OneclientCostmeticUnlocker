@@ -1,12 +1,27 @@
 package localcosmetics;
 
 import java.lang.reflect.*;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.*;
 
-/** Minecraft-independent PolyPlus adapter. All overrides live in this JVM only. */
+/** Minecraft-independent PolyPlus adapter for local cosmetic overrides. */
 public final class LocalCosmetics {
     private static final String ROOT = "org.polyfrost.polyplus.client.";
-    private static final Map<Object,Integer> overrides = new HashMap<>();
+    private static final Path SAVE = Path.of("config", "oneclient-local-cosmetics.properties");
+    private static final Map<String,Integer> overrides = new HashMap<>();
+    private static boolean loaded, writable = true;
+    private static void loadSelections() {
+        if (loaded) return;
+        loaded = true;
+        try {
+            overrides.putAll(SelectionStore.load(SAVE));
+        } catch (IOException | SecurityException failure) {
+            writable = false;
+            System.err.println("[OneClient Local Cosmetics] Could not read " + SAVE.toAbsolutePath()
+                + "; saving disabled to preserve the file: " + failure.getMessage());
+        }
+    }
     private static Class<?> type(String name) throws Exception {
         return Class.forName(name, true, LocalCosmetics.class.getClassLoader());
     }
@@ -42,11 +57,15 @@ public final class LocalCosmetics {
     @SuppressWarnings("unchecked")
     public static synchronized Object localEquipped(Object catalog) {
         try {
+            loadSelections();
             Object current = field(catalog, "localEquipped").get(null);
             Map<Object,Integer> equipped = new HashMap<>((Map<Object,Integer>) call(current, "getEquipped"));
-            for (Map.Entry<Object,Integer> entry : overrides.entrySet()) {
-                if (entry.getValue() == null) equipped.remove(entry.getKey());
-                else equipped.put(entry.getKey(), entry.getValue());
+            for (Object slot : type(ROOT + "network.http.responses.BodySlot").getEnumConstants()) {
+                String name = ((Enum<?>) slot).name();
+                if (!overrides.containsKey(name)) continue;
+                Integer id = overrides.get(name);
+                if (id == null) equipped.remove(slot);
+                else equipped.put(slot, id);
             }
             Object result = current.getClass().getConstructor(Map.class).newInstance(equipped);
             field(catalog, "localEquipped").set(null, result);
@@ -56,14 +75,28 @@ public final class LocalCosmetics {
     @SuppressWarnings("unchecked")
     public static synchronized Object equip(Object catalog, Object request) {
         try {
-            overrides.putAll((Map<Object,Integer>) call(request, "getEquipped"));
+            loadSelections();
+            Map<Object,Integer> selections = (Map<Object,Integer>) call(request, "getEquipped");
+            selections.forEach((slot, id) -> overrides.put(((Enum<?>) slot).name(), id));
             localEquipped(catalog);
+            if (writable) {
+                try { SelectionStore.save(SAVE, overrides); }
+                catch (IOException | SecurityException failure) {
+                    System.err.println("[OneClient Local Cosmetics] Could not save " + SAVE.toAbsolutePath()
+                        + "; selections remain active in memory: " + failure.getMessage());
+                }
+            }
             return unit();
         } catch (Exception e) { throw new IllegalStateException(e); }
     }
-    public static synchronized void reset() { overrides.clear(); }
+    public static synchronized void reset() {
+        overrides.clear();
+        loaded = false;
+        writable = true;
+    }
     public static synchronized boolean overridesPlayer(UUID uuid) {
-        if (overrides.isEmpty()) return false;
+        loadSelections();
+        if (uuid == null || overrides.isEmpty()) return false;
         try { return uuid.equals(call(singleton(ROOT + "utils.ClientPlatform"), "localPlayerUuid")); }
         catch (Exception e) { throw new IllegalStateException(e); }
     }
